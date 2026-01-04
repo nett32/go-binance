@@ -3,6 +3,7 @@ package futures
 import (
 	"testing"
 
+	"github.com/shopspring/decimal"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -141,11 +142,11 @@ func (s *tickerServiceTestSuite) TestListPrices() {
 	r.Len(prices, 2)
 	e1 := &SymbolPrice{
 		Symbol: "LTCBTC",
-		Price:  "4.00000200",
+		Price:  decimal.RequireFromString("4.00000200"),
 	}
 	e2 := &SymbolPrice{
 		Symbol: "ETHBTC",
-		Price:  "0.07946600",
+		Price:  decimal.RequireFromString("0.07946600"),
 	}
 	s.assertSymbolPriceEqual(e1, prices[0])
 	s.assertSymbolPriceEqual(e2, prices[1])
@@ -171,7 +172,7 @@ func (s *tickerServiceTestSuite) TestListSinglePrice() {
 	r.Len(prices, 1)
 	e1 := &SymbolPrice{
 		Symbol: "LTCBTC",
-		Price:  "4.00000200",
+		Price:  decimal.RequireFromString("4.00000200"),
 	}
 	s.assertSymbolPriceEqual(e1, prices[0])
 }

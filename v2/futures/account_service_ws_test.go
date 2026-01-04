@@ -202,5 +202,5 @@ func (s *accountWsServiceTestSuite) TestGetAccountBalance() {
 	s.Len(response.Result, 2)
 	s.Equal("USDT", response.Result[0].Asset)
 	s.Equal("192.32494207", response.Result[0].Balance)
-	s.Equal("185.54784206", response.Result[0].AvailableBalance)
+	s.Equal("185.54784206", response.Result[0].AvailableBalance.String())
 }

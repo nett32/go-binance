@@ -19,7 +19,7 @@ type SorOrderPlaceWsService struct {
 
 // NewSorOrderPlaceWsService init SorOrderPlaceWsService
 func NewSorOrderPlaceWsService(apiKey, secretKey string) (*SorOrderPlaceWsService, error) {
-	conn, err := websocket.NewConnection(WsApiInitReadWriteConn, WebsocketKeepalive, WebsocketTimeoutReadWriteConnection)
+	conn, err := websocket.NewConnection(WrapWsApiInitReadWriteConn(false, nil), WebsocketKeepalive, WebsocketTimeoutReadWriteConnection)
 	if err != nil {
 		return nil, err
 	}

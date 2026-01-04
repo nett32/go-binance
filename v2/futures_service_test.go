@@ -1,6 +1,7 @@
 package binance
 
 import (
+	"github.com/shopspring/decimal"
 	"testing"
 
 	"github.com/stretchr/testify/suite"
@@ -77,7 +78,7 @@ func (s *futuresTransferTestSuite) TestListFuturesTransfer() {
 			{
 				Asset:     asset,
 				TranID:    int64(100000001),
-				Amount:    "40.84624400",
+				Amount:    decimal.RequireFromString("40.84624400"),
 				Type:      1,
 				Timestamp: int64(1555056425000),
 				Status:    FuturesTransferStatusTypeConfirmed,

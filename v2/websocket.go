@@ -7,6 +7,7 @@ import (
 	"sync/atomic"
 	"time"
 
+	"github.com/adshao/go-binance/v2/common"
 	"github.com/gorilla/websocket"
 )
 
@@ -18,16 +19,18 @@ type ErrHandler func(err error)
 
 // WsConfig webservice configuration
 type WsConfig struct {
-	Endpoint string
-	Header   http.Header
-	Proxy    *string
+	Endpoint  string
+	Header    http.Header
+	Proxy     *string
+	ProxyFunc common.ProxyFunc
 }
 
-func newWsConfig(endpoint string) *WsConfig {
+func newWsConfig(endpoint string, proxy common.ProxyFunc) *WsConfig {
 	return &WsConfig{
-		Endpoint: endpoint,
-		Proxy:    getWsProxyUrl(),
-		Header:   make(http.Header),
+		Endpoint:  endpoint,
+		Proxy:     getWsProxyUrl(),
+		Header:    make(http.Header),
+		ProxyFunc: proxy,
 	}
 }
 
@@ -46,7 +49,9 @@ type ConnHandler func(context.Context, *websocket.Conn)
 // WsServeWithConnHandler serves websocket with custom connection handler, useful for custom keepalive
 var wsServeWithConnHandler = func(cfg *WsConfig, handler WsHandler, errHandler ErrHandler, connHandler ConnHandler) (doneC, stopC chan struct{}, err error) {
 	proxy := http.ProxyFromEnvironment
-	if cfg.Proxy != nil {
+	if cfg.ProxyFunc != nil {
+		proxy = cfg.ProxyFunc
+	} else if cfg.Proxy != nil {
 		u, err := url.Parse(*cfg.Proxy)
 		if err != nil {
 			return nil, nil, err

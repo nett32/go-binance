@@ -54,6 +54,15 @@ func ToInt64(digit interface{}) (i int64, err error) {
 	return 0, fmt.Errorf("unexpected digit: %v", digit)
 }
 
+func EncodeStringList(in []string) string {
+	l := make([]string, len(in))
+	copy(l, in)
+	for i := range l {
+		l[i] = `"` + l[i] + `"`
+	}
+	return "[" + strings.Join(l, ",") + "]"
+}
+
 const (
 	SPOT_ORDER_PREFIX     = "x-B3AUXNYV"
 	CONTRACT_ORDER_PREFIX = "x-ftGmvgAN"

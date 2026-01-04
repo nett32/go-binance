@@ -4,6 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"net/http"
+
+	"github.com/shopspring/decimal"
 )
 
 // GetBalanceService get account balance
@@ -34,15 +36,15 @@ func (s *GetBalanceService) Do(ctx context.Context, opts ...RequestOption) (res 
 
 // Balance define user balance of your account
 type Balance struct {
-	AccountAlias       string `json:"accountAlias"`
-	Asset              string `json:"asset"`
-	Balance            string `json:"balance"`
-	CrossWalletBalance string `json:"crossWalletBalance"`
-	CrossUnPnl         string `json:"crossUnPnl"`
-	AvailableBalance   string `json:"availableBalance"`
-	MaxWithdrawAmount  string `json:"maxWithdrawAmount"`
-	MarginAvailable    bool   `json:"marginAvailable"`
-	UpdateTime         int64  `json:"updateTime"`
+	AccountAlias       string          `json:"accountAlias"`
+	Asset              string          `json:"asset"`
+	Balance            string          `json:"balance"`
+	CrossWalletBalance string          `json:"crossWalletBalance"`
+	CrossUnPnl         string          `json:"crossUnPnl"`
+	AvailableBalance   decimal.Decimal `json:"availableBalance"`
+	MaxWithdrawAmount  string          `json:"maxWithdrawAmount"`
+	MarginAvailable    bool            `json:"marginAvailable"`
+	UpdateTime         int64           `json:"updateTime"`
 }
 
 // GetAccountService get account info

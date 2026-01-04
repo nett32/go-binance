@@ -4,6 +4,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/adshao/go-binance/v2/common"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -27,13 +28,12 @@ func SetupTest(t *testing.T) *baseIntegrationTestSuite {
 
 	var client *Client
 	if proxyURL != "" {
-		client = NewProxiedClient(apiKey, secretKey, proxyURL)
+		client = NewProxiedClient(apiKey, secretKey, proxyURL, common.UseTestnet(useTestnet))
 	} else {
-		client = NewClient(apiKey, secretKey)
+		client = NewClient(apiKey, secretKey, common.UseTestnet(useTestnet))
 	}
 
 	client.Debug = true
-	UseTestnet = useTestnet // Set the global testnet flag
 
 	return &baseIntegrationTestSuite{
 		client: client,

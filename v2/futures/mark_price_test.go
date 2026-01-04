@@ -3,6 +3,7 @@ package futures
 import (
 	"testing"
 
+	"github.com/shopspring/decimal"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -40,7 +41,7 @@ func (s *premiumIndexServiceTestSuite) TestGetPremiumIndex() {
 	s.r().NoError(err)
 	e := []*PremiumIndex{&PremiumIndex{
 		Symbol:               symbol,
-		MarkPrice:            "11012.80409769",
+		MarkPrice:            decimal.RequireFromString("11012.80409769"),
 		IndexPrice:           "11781.80495970",
 		EstimatedSettlePrice: "11781.80495970",
 		LastFundingRate:      "-0.03750000",

@@ -12,6 +12,7 @@ package binance
 import (
 	"context"
 	"encoding/json"
+	"github.com/shopspring/decimal"
 	"net/http"
 )
 
@@ -22,7 +23,7 @@ type CreateUserUniversalTransferService struct {
 	c          *Client
 	types      UserUniversalTransferType
 	asset      string
-	amount     string // type: DECIMAL
+	amount     decimal.Decimal // type: DECIMAL
 	fromSymbol *string
 	toSymbol   *string
 }
@@ -40,7 +41,7 @@ func (s *CreateUserUniversalTransferService) Asset(v string) *CreateUserUniversa
 }
 
 // Amount sets the Amount parameter (MANDATORY).
-func (s *CreateUserUniversalTransferService) Amount(v string) *CreateUserUniversalTransferService {
+func (s *CreateUserUniversalTransferService) Amount(v decimal.Decimal) *CreateUserUniversalTransferService {
 	s.amount = v
 	return s
 }

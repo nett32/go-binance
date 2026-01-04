@@ -3,6 +3,7 @@ package futures
 import (
 	"testing"
 
+	"github.com/shopspring/decimal"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -210,15 +211,15 @@ func (s *tradeServiceTestSuite) TestAccountTradeList() {
 	r.Len(trades, 1)
 	e := &AccountTrade{
 		Buyer:           false,
-		Commission:      "-0.07819010",
+		Commission:      decimal.RequireFromString("-0.07819010"),
 		CommissionAsset: "USDT",
 		ID:              698759,
 		Maker:           false,
 		OrderID:         25851813,
-		Price:           "7819.01",
-		Quantity:        "0.002",
-		QuoteQuantity:   "15.63802",
-		RealizedPnl:     "-0.91539999",
+		Price:           decimal.RequireFromString("7819.01"),
+		Quantity:        decimal.RequireFromString("0.002"),
+		QuoteQuantity:   decimal.RequireFromString("15.63802"),
+		RealizedPnl:     decimal.RequireFromString("-0.91539999"),
 		Side:            SideTypeSell,
 		PositionSide:    PositionSideTypeShort,
 		Symbol:          symbol,

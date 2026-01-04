@@ -18,8 +18,8 @@ type OrderListPlaceOtocoWsService struct {
 }
 
 // NewOrderListPlaceOtocoWsService init OrderListPlaceOtocoWsService
-func NewOrderListPlaceOtocoWsService(apiKey, secretKey string) (*OrderListPlaceOtocoWsService, error) {
-	conn, err := websocket.NewConnection(WsApiInitReadWriteConn, WebsocketKeepalive, WebsocketTimeoutReadWriteConnection)
+func NewOrderListPlaceOtocoWsService(apiKey, secretKey string, clientCfg common.ClientConfig) (*OrderListPlaceOtocoWsService, error) {
+	conn, err := websocket.NewConnection(WrapWsApiInitReadWriteConn(clientCfg.UseTestnet, clientCfg.ProxyFunc), WebsocketKeepalive, WebsocketTimeoutReadWriteConnection)
 	if err != nil {
 		return nil, err
 	}

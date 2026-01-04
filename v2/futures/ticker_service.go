@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/shopspring/decimal"
+
 	"github.com/adshao/go-binance/v2/common"
 )
 
@@ -89,8 +91,8 @@ func (s *ListPricesService) Do(ctx context.Context, opts ...RequestOption) (res 
 
 // SymbolPrice define symbol and price pair
 type SymbolPrice struct {
-	Symbol string `json:"symbol"`
-	Price  string `json:"price"`
+	Symbol string          `json:"symbol"`
+	Price  decimal.Decimal `json:"price"`
 }
 
 // ListPriceChangeStatsService show stats of price change in last 24 hours for all symbols

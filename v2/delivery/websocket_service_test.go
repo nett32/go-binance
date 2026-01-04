@@ -1124,7 +1124,7 @@ func (s *websocketServiceTestSuite) TestPartialDepthServe() {
 }
 
 func (s *websocketServiceTestSuite) TestPartialDepthServeWithInvalidLevels() {
-	s.testPartialDepthServe(8, nil, errors.New("Invalid levels"), 0)
+	s.testPartialDepthServe(8, nil, errors.New("invalid levels"), 0)
 }
 
 func (s *websocketServiceTestSuite) TestPartialDepthServeWithValidRate() {

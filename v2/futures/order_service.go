@@ -9,6 +9,8 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/shopspring/decimal"
+
 	"github.com/adshao/go-binance/v2/common"
 )
 
@@ -548,10 +550,10 @@ type Order struct {
 	Symbol                  string           `json:"symbol"`
 	OrderID                 int64            `json:"orderId"`
 	ClientOrderID           string           `json:"clientOrderId"`
-	Price                   string           `json:"price"`
+	Price                   decimal.Decimal  `json:"price"`
 	ReduceOnly              bool             `json:"reduceOnly"`
-	OrigQuantity            string           `json:"origQty"`
-	ExecutedQuantity        string           `json:"executedQty"`
+	OrigQuantity            decimal.Decimal  `json:"origQty"`
+	ExecutedQuantity        decimal.Decimal  `json:"executedQty"`
 	CumQuantity             string           `json:"cumQty"` // deprecated: use ExecutedQuantity instead
 	CumQuote                string           `json:"cumQuote"`
 	Status                  OrderStatusType  `json:"status"`
@@ -564,7 +566,7 @@ type Order struct {
 	WorkingType             WorkingType      `json:"workingType"`
 	ActivatePrice           string           `json:"activatePrice"`
 	PriceRate               string           `json:"priceRate"`
-	AvgPrice                string           `json:"avgPrice"`
+	AvgPrice                decimal.Decimal  `json:"avgPrice"`
 	OrigType                OrderType        `json:"origType"`
 	PositionSide            PositionSideType `json:"positionSide"`
 	PriceProtect            bool             `json:"priceProtect"`
@@ -791,7 +793,7 @@ func (s *CancelMultiplesOrdersService) Do(ctx context.Context, opts ...RequestOp
 		r.setFormParam("orderIdList", orderIDListString)
 	}
 	if s.origClientOrderIDList != nil {
-		r.setFormParam("origClientOrderIdList", s.origClientOrderIDList)
+		r.setFormParam("origClientOrderIdList", common.EncodeStringList(s.origClientOrderIDList))
 	}
 	data, _, err := s.c.callAPI(ctx, r, opts...)
 	if err != nil {

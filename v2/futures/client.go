@@ -13,7 +13,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/bitly/go-simplejson"
+	simplejson "github.com/bitly/go-simplejson"
 
 	"github.com/adshao/go-binance/v2/common"
 )
@@ -214,8 +214,8 @@ func newJSON(data []byte) (j *simplejson.Json, err error) {
 }
 
 // getApiEndpoint return the base endpoint of the WS according the UseTestnet flag
-func getApiEndpoint() string {
-	if UseTestnet {
+func getApiEndpoint(useTestnet bool) string {
+	if useTestnet {
 		return BaseApiTestnetUrl
 	}
 	return BaseApiMainUrl
@@ -224,20 +224,37 @@ func getApiEndpoint() string {
 // NewClient initialize an API client instance with API key and secret key.
 // You should always call this function before using this SDK.
 // Services will be created by the form client.NewXXXService().
-func NewClient(apiKey, secretKey string) *Client {
+func NewClient(apiKey, secretKey string, opts ...common.ClientOptionFunc) *Client {
+	clientConfig := common.ParseClientConfig(opts...)
 	return &Client{
 		APIKey:     apiKey,
 		SecretKey:  secretKey,
 		KeyType:    common.KeyTypeHmac,
-		BaseURL:    getApiEndpoint(),
+		BaseURL:    getApiEndpoint(clientConfig.UseTestnet),
 		UserAgent:  "Binance/golang",
-		HTTPClient: http.DefaultClient,
+		HTTPClient: clientConfig.HTTPClient(),
 		Logger:     log.New(os.Stderr, "Binance-golang ", log.LstdFlags),
+		clientCfg:  clientConfig,
+	}
+}
+
+// NewClient2 passing a proxy url
+func NewClient2(apiKey, secretKey string, opts ...common.ClientOptionFunc) *Client {
+	clientConfig := common.ParseClientConfig(opts...)
+	return &Client{
+		APIKey:     apiKey,
+		SecretKey:  secretKey,
+		KeyType:    common.KeyTypeHmac,
+		BaseURL:    getApiEndpoint(clientConfig.UseTestnet),
+		UserAgent:  "Binance/golang",
+		HTTPClient: clientConfig.HTTPClient(),
+		Logger:     log.New(os.Stderr, "Binance-golang ", log.LstdFlags),
+		clientCfg:  clientConfig,
 	}
 }
 
 // NewProxiedClient passing a proxy url
-func NewProxiedClient(apiKey, secretKey, proxyUrl string) *Client {
+func NewProxiedClient(apiKey, secretKey, proxyUrl string, opts ...common.ClientOptionFunc) *Client {
 	proxy, err := url.Parse(proxyUrl)
 	if err != nil {
 		log.Fatal(err)
@@ -246,16 +263,18 @@ func NewProxiedClient(apiKey, secretKey, proxyUrl string) *Client {
 		Proxy:           http.ProxyURL(proxy),
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
+	clientConfig := common.ParseClientConfig(opts...)
 	return &Client{
 		APIKey:    apiKey,
 		SecretKey: secretKey,
 		KeyType:   common.KeyTypeHmac,
-		BaseURL:   getApiEndpoint(),
+		BaseURL:   getApiEndpoint(clientConfig.UseTestnet),
 		UserAgent: "Binance/golang",
 		HTTPClient: &http.Client{
 			Transport: tr,
 		},
-		Logger: log.New(os.Stderr, "Binance-golang ", log.LstdFlags),
+		Logger:    log.New(os.Stderr, "Binance-golang ", log.LstdFlags),
+		clientCfg: clientConfig,
 	}
 }
 
@@ -273,6 +292,7 @@ type Client struct {
 	Logger     *log.Logger
 	TimeOffset int64
 	do         doFunc
+	clientCfg  common.ClientConfig
 
 	UsedWeight common.UsedWeight
 	OrderCount common.OrderCount

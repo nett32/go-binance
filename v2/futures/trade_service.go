@@ -4,6 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"net/http"
+
+	"github.com/shopspring/decimal"
 )
 
 // HistoricalTradesService trades
@@ -293,15 +295,15 @@ func (s *ListAccountTradeService) Do(ctx context.Context, opts ...RequestOption)
 // AccountTrade define account trade
 type AccountTrade struct {
 	Buyer           bool             `json:"buyer"`
-	Commission      string           `json:"commission"`
+	Commission      decimal.Decimal  `json:"commission"`
 	CommissionAsset string           `json:"commissionAsset"`
 	ID              int64            `json:"id"`
 	Maker           bool             `json:"maker"`
 	OrderID         int64            `json:"orderId"`
-	Price           string           `json:"price"`
-	Quantity        string           `json:"qty"`
-	QuoteQuantity   string           `json:"quoteQty"`
-	RealizedPnl     string           `json:"realizedPnl"`
+	Price           decimal.Decimal  `json:"price"`
+	Quantity        decimal.Decimal  `json:"qty"`
+	QuoteQuantity   decimal.Decimal  `json:"quoteQty"`
+	RealizedPnl     decimal.Decimal  `json:"realizedPnl"`
 	Side            SideType         `json:"side"`
 	PositionSide    PositionSideType `json:"positionSide"`
 	Symbol          string           `json:"symbol"`

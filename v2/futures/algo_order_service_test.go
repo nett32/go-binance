@@ -3,6 +3,7 @@ package futures
 import (
 	"testing"
 
+	"github.com/shopspring/decimal"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -275,12 +276,12 @@ func (s *algoOrderServiceTestSuite) TestGetAlgoOrderService() {
 		Side:                    SideTypeSell,
 		PositionSide:            PositionSideTypeBoth,
 		TimeInForce:             TimeInForceTypeGTC,
-		Quantity:                "0.01",
+		Quantity:                decimal.RequireFromString("0.01"),
 		AlgoStatus:              "CANCELED",
 		ActualOrderId:           "",
-		ActualPrice:             "0.00000",
-		TriggerPrice:            "750.000",
-		Price:                   "750.000",
+		ActualPrice:             decimal.RequireFromString("0.00000"),
+		TriggerPrice:            decimal.RequireFromString("750.000"),
+		Price:                   decimal.RequireFromString("750.000"),
 		IcebergQuantity:         nil,
 		TpTriggerPrice:          "0.000",
 		TpPrice:                 "0.000",
@@ -418,12 +419,12 @@ func (s *algoOrderServiceTestSuite) TestGetOpenAlgoOrdersService() {
 		Side:                    SideTypeSell,
 		PositionSide:            PositionSideTypeBoth,
 		TimeInForce:             TimeInForceTypeGTC,
-		Quantity:                "0.01",
+		Quantity:                decimal.RequireFromString("0.01"),
 		AlgoStatus:              "NEW",
 		ActualOrderId:           "",
-		ActualPrice:             "0.00000",
-		TriggerPrice:            "750.000",
-		Price:                   "750.000",
+		ActualPrice:             decimal.RequireFromString("0.00000"),
+		TriggerPrice:            decimal.RequireFromString("750.000"),
+		Price:                   decimal.RequireFromString("750.000"),
 		IcebergQuantity:         nil,
 		TpTriggerPrice:          "0.000",
 		TpPrice:                 "0.000",
@@ -526,12 +527,12 @@ func (s *algoOrderServiceTestSuite) TestGetAllAlgoOrdersService() {
 		Side:                    SideTypeSell,
 		PositionSide:            PositionSideTypeBoth,
 		TimeInForce:             TimeInForceTypeGTC,
-		Quantity:                "0.01",
+		Quantity:                decimal.RequireFromString("0.01"),
 		AlgoStatus:              "CANCELED",
 		ActualOrderId:           "",
-		ActualPrice:             "0.00000",
-		TriggerPrice:            "750.000",
-		Price:                   "750.000",
+		ActualPrice:             decimal.RequireFromString("0.00000"),
+		TriggerPrice:            decimal.RequireFromString("750.000"),
+		Price:                   decimal.RequireFromString("750.000"),
 		IcebergQuantity:         nil,
 		TpTriggerPrice:          "0.000",
 		TpPrice:                 "0.000",

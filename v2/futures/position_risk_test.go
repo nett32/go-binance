@@ -3,6 +3,7 @@ package futures
 import (
 	"testing"
 
+	"github.com/shopspring/decimal"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -50,16 +51,16 @@ func (s *positionRiskServiceTestSuite) TestGetPositionRiskV2() {
 	r.NoError(err)
 	r.Len(res, 1)
 	e := &PositionRisk{
-		EntryPrice:       "10359.38000",
+		EntryPrice:       decimal.RequireFromString("10359.38000"),
 		BreakEvenPrice:   "10387.38000",
 		MarginType:       "isolated",
 		IsAutoAddMargin:  "false",
 		IsolatedMargin:   "3.15899368",
-		Leverage:         "125",
-		LiquidationPrice: "9332.61",
+		Leverage:         decimal.RequireFromString("125"),
+		LiquidationPrice: decimal.RequireFromString("9332.61"),
 		MarkPrice:        "10348.27548846",
 		MaxNotionalValue: "50000",
-		PositionAmt:      "0.003",
+		PositionAmt:      decimal.RequireFromString("0.003"),
 		Symbol:           "BTCUSDT",
 		UnRealizedProfit: "-0.03331353",
 		PositionSide:     "BOTH",

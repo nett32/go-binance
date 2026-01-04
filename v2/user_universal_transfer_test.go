@@ -5,6 +5,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/shopspring/decimal"
+
 	"github.com/stretchr/testify/suite"
 )
 
@@ -27,7 +29,7 @@ func (s *userUniversalTransferTestSuite) TestUserUniversalTransfer() {
 
 	types := UserUniversalTransferTypeMainToUmFutures
 	asset := "USDT"
-	amount := "0.1"
+	amount := decimal.NewFromFloat(0.1)
 	fromSymbol := "USDT"
 	toSymbol := "USDT"
 

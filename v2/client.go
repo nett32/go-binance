@@ -136,9 +136,6 @@ type CancelReplaceMode string
 
 type MarginAccountBorrowRepayType string
 
-// UseTestnet switch all the API endpoints from production to the testnet
-var UseTestnet = false
-
 // Global enums
 const (
 	SideTypeBuy  SideType = "BUY"
@@ -357,8 +354,8 @@ func newJSON(data []byte) (j *simplejson.Json, err error) {
 }
 
 // getAPIEndpoint return the base endpoint of the Rest API according the UseTestnet flag
-func getAPIEndpoint() string {
-	if UseTestnet {
+func getAPIEndpoint(useTestnet bool) string {
+	if useTestnet {
 		return BaseAPITestnetURL
 	}
 	return BaseAPIMainURL
@@ -367,20 +364,38 @@ func getAPIEndpoint() string {
 // NewClient initialize an API client instance with API key and secret key.
 // You should always call this function before using this SDK.
 // Services will be created by the form client.NewXXXService().
-func NewClient(apiKey, secretKey string) *Client {
+func NewClient(apiKey, secretKey string, opts ...common.ClientOptionFunc) *Client {
+	clientConfig := common.ParseClientConfig(opts...)
 	return &Client{
 		APIKey:     apiKey,
 		SecretKey:  secretKey,
 		KeyType:    common.KeyTypeHmac,
-		BaseURL:    getAPIEndpoint(),
+		BaseURL:    getAPIEndpoint(clientConfig.UseTestnet),
 		UserAgent:  "Binance/golang",
-		HTTPClient: http.DefaultClient,
+		HTTPClient: clientConfig.HTTPClient(),
 		Logger:     log.New(os.Stderr, "Binance-golang ", log.LstdFlags),
+		clientCfg:  clientConfig,
+	}
+}
+
+// NewClient2 passing a proxy url
+func NewClient2(apiKey, secretKey string, opts ...common.ClientOptionFunc) *Client {
+	clientConfig := common.ParseClientConfig(opts...)
+	return &Client{
+		APIKey:     apiKey,
+		SecretKey:  secretKey,
+		KeyType:    common.KeyTypeHmac,
+		BaseURL:    getAPIEndpoint(clientConfig.UseTestnet),
+		UserAgent:  "Binance/golang",
+		HTTPClient: clientConfig.HTTPClient(),
+		Logger:     log.New(os.Stderr, "Binance-golang ", log.LstdFlags),
+		clientCfg:  clientConfig,
 	}
 }
 
 // NewProxiedClient passing a proxy url
-func NewProxiedClient(apiKey, secretKey, proxyUrl string) *Client {
+func NewProxiedClient(apiKey, secretKey, proxyUrl string, opts ...common.ClientOptionFunc) *Client {
+	clientConfig := common.ParseClientConfig(opts...)
 	proxy, err := url.Parse(proxyUrl)
 	if err != nil {
 		log.Fatal(err)
@@ -393,12 +408,13 @@ func NewProxiedClient(apiKey, secretKey, proxyUrl string) *Client {
 		APIKey:    apiKey,
 		SecretKey: secretKey,
 		KeyType:   common.KeyTypeHmac,
-		BaseURL:   getAPIEndpoint(),
+		BaseURL:   getAPIEndpoint(clientConfig.UseTestnet),
 		UserAgent: "Binance/golang",
 		HTTPClient: &http.Client{
 			Transport: tr,
 		},
-		Logger: log.New(os.Stderr, "Binance-golang ", log.LstdFlags),
+		Logger:    log.New(os.Stderr, "Binance-golang ", log.LstdFlags),
+		clientCfg: clientConfig,
 	}
 }
 
@@ -431,6 +447,7 @@ type Client struct {
 	Logger     *log.Logger
 	TimeOffset int64
 	do         doFunc
+	clientCfg  common.ClientConfig
 
 	UsedWeight common.UsedWeight
 	OrderCount common.OrderCount
@@ -1457,32 +1474,32 @@ func (c *Client) NewDualInvestmentService() *DualInvestmentService {
 
 // NewOrderCreateWsService init order creation websocket service
 func (c *Client) NewOrderCreateWsService() (*OrderCreateWsService, error) {
-	return NewOrderCreateWsService(c.APIKey, c.SecretKey)
+	return NewOrderCreateWsService(c.APIKey, c.SecretKey, c.clientCfg)
 }
 
 // NewOrderListCreateWsService init order list creation websocket service (OCO)
 func (c *Client) NewOrderListCreateWsService() (*OrderListCreateWsService, error) {
-	return NewOrderListCreateWsService(c.APIKey, c.SecretKey)
+	return NewOrderListCreateWsService(c.APIKey, c.SecretKey, c.clientCfg)
 }
 
 // NewOrderListPlaceWsService init order list placement websocket service (deprecated OCO)
 func (c *Client) NewOrderListPlaceWsService() (*OrderListPlaceWsService, error) {
-	return NewOrderListPlaceWsService(c.APIKey, c.SecretKey)
+	return NewOrderListPlaceWsService(c.APIKey, c.SecretKey, c.clientCfg)
 }
 
 // NewOrderListPlaceOtoWsService init order list placement websocket service (OTO)
 func (c *Client) NewOrderListPlaceOtoWsService() (*OrderListPlaceOtoWsService, error) {
-	return NewOrderListPlaceOtoWsService(c.APIKey, c.SecretKey)
+	return NewOrderListPlaceOtoWsService(c.APIKey, c.SecretKey, c.clientCfg)
 }
 
 // NewOrderListPlaceOtocoWsService init order list placement websocket service (OTOCO)
 func (c *Client) NewOrderListPlaceOtocoWsService() (*OrderListPlaceOtocoWsService, error) {
-	return NewOrderListPlaceOtocoWsService(c.APIKey, c.SecretKey)
+	return NewOrderListPlaceOtocoWsService(c.APIKey, c.SecretKey, c.clientCfg)
 }
 
 // NewOrderListCancelWsService init order list cancellation websocket service
 func (c *Client) NewOrderListCancelWsService() (*OrderListCancelWsService, error) {
-	return NewOrderListCancelWsService(c.APIKey, c.SecretKey)
+	return NewOrderListCancelWsService(c.APIKey, c.SecretKey, c.clientCfg)
 }
 
 // NewSorOrderPlaceWsService init SOR order placement websocket service

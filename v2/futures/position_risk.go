@@ -4,6 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"net/http"
+
+	"github.com/shopspring/decimal"
 )
 
 // GetPositionRiskV3Service get account balance
@@ -42,21 +44,21 @@ func (s *GetPositionRiskService) Do(ctx context.Context, opts ...RequestOption) 
 
 // PositionRisk define position risk info
 type PositionRisk struct {
-	EntryPrice       string `json:"entryPrice"`
-	BreakEvenPrice   string `json:"breakEvenPrice"`
-	MarginType       string `json:"marginType"`
-	IsAutoAddMargin  string `json:"isAutoAddMargin"`
-	IsolatedMargin   string `json:"isolatedMargin"`
-	Leverage         string `json:"leverage"`
-	LiquidationPrice string `json:"liquidationPrice"`
-	MarkPrice        string `json:"markPrice"`
-	MaxNotionalValue string `json:"maxNotionalValue"`
-	PositionAmt      string `json:"positionAmt"`
-	Symbol           string `json:"symbol"`
-	UnRealizedProfit string `json:"unRealizedProfit"`
-	PositionSide     string `json:"positionSide"`
-	Notional         string `json:"notional"`
-	IsolatedWallet   string `json:"isolatedWallet"`
+	EntryPrice       decimal.Decimal  `json:"entryPrice"`
+	BreakEvenPrice   string           `json:"breakEvenPrice"`
+	MarginType       string           `json:"marginType"`
+	IsAutoAddMargin  string           `json:"isAutoAddMargin"`
+	IsolatedMargin   string           `json:"isolatedMargin"`
+	Leverage         decimal.Decimal  `json:"leverage"`
+	LiquidationPrice decimal.Decimal  `json:"liquidationPrice"`
+	MarkPrice        string           `json:"markPrice"`
+	MaxNotionalValue string           `json:"maxNotionalValue"`
+	PositionAmt      decimal.Decimal  `json:"positionAmt"`
+	Symbol           string           `json:"symbol"`
+	UnRealizedProfit string           `json:"unRealizedProfit"`
+	PositionSide     PositionSideType `json:"positionSide"`
+	Notional         string           `json:"notional"`
+	IsolatedWallet   string           `json:"isolatedWallet"`
 }
 
 type GetPositionRiskV3Service struct {

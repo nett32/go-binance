@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
+
+	"github.com/shopspring/decimal"
 )
 
 // CreateAlgoOrderService creates a new service for creating algo orders.
@@ -359,12 +361,12 @@ type GetAlgoOrderResp struct {
 	Side                    SideType                `json:"side"`
 	PositionSide            PositionSideType        `json:"positionSide"`
 	TimeInForce             TimeInForceType         `json:"timeInForce"`
-	Quantity                string                  `json:"quantity"`
+	Quantity                decimal.Decimal         `json:"quantity"`
 	AlgoStatus              string                  `json:"algoStatus"`
 	ActualOrderId           string                  `json:"actualOrderId"`
-	ActualPrice             string                  `json:"actualPrice"`
-	TriggerPrice            string                  `json:"triggerPrice"`
-	Price                   string                  `json:"price"`
+	ActualPrice             decimal.Decimal         `json:"actualPrice"`
+	TriggerPrice            decimal.Decimal         `json:"triggerPrice"`
+	Price                   decimal.Decimal         `json:"price"`
 	IcebergQuantity         *int64                  `json:"icebergQuantity,omitempty"`
 	TpTriggerPrice          string                  `json:"tpTriggerPrice"`
 	TpPrice                 string                  `json:"tpPrice"`
