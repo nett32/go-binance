@@ -1,6 +1,8 @@
 package binance
 
 import (
+	"net/http"
+	"net/url"
 	"os"
 	"testing"
 
@@ -28,7 +30,9 @@ func SetupTest(t *testing.T) *baseIntegrationTestSuite {
 
 	var client *Client
 	if proxyURL != "" {
-		client = NewProxiedClient(apiKey, secretKey, proxyURL, common.UseTestnet(useTestnet))
+		client = NewClient(apiKey, secretKey, common.WithProxyFunc(func(h *http.Request) (*url.URL, error) {
+			return url.Parse(proxyURL)
+		}), common.UseTestnet(useTestnet))
 	} else {
 		client = NewClient(apiKey, secretKey, common.UseTestnet(useTestnet))
 	}

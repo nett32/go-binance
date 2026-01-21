@@ -3,7 +3,6 @@ package delivery
 import (
 	"bytes"
 	"context"
-	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -193,46 +192,8 @@ func NewClient(apiKey, secretKey string, opts ...common.ClientOptionFunc) *Clien
 		KeyType:    common.KeyTypeHmac,
 		BaseURL:    getApiEndpoint(clientConfig.UseTestnet),
 		UserAgent:  "Binance/golang",
-		HTTPClient: http.DefaultClient,
+		HTTPClient: clientConfig.HTTPClient(),
 		Logger:     log.New(os.Stderr, "Binance-golang ", log.LstdFlags),
-	}
-}
-
-func NewProxiedClient2(apiKey, secretKey string, opts ...common.ClientOptionFunc) *Client {
-	clientConfig := common.ParseClientConfig(opts...)
-	return &Client{
-		APIKey:    apiKey,
-		SecretKey: secretKey,
-		KeyType:   common.KeyTypeHmac,
-		BaseURL:   getApiEndpoint(clientConfig.UseTestnet),
-		UserAgent: "Binance/golang",
-		HTTPClient: &http.Client{
-			Transport: clientConfig.RoundTripper,
-		},
-		Logger: log.New(os.Stderr, "Binance-golang ", log.LstdFlags),
-	}
-}
-
-func NewProxiedClient(apiKey, secretKey, proxyUrl string, opts ...common.ClientOptionFunc) *Client {
-	proxy, err := url.Parse(proxyUrl)
-	if err != nil {
-		log.Fatal(err)
-	}
-	tr := &http.Transport{
-		Proxy:           http.ProxyURL(proxy),
-		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-	}
-	clientConfig := common.ParseClientConfig(opts...)
-	return &Client{
-		APIKey:    apiKey,
-		SecretKey: secretKey,
-		KeyType:   common.KeyTypeHmac,
-		BaseURL:   getApiEndpoint(clientConfig.UseTestnet),
-		UserAgent: "Binance/golang",
-		HTTPClient: &http.Client{
-			Transport: tr,
-		},
-		Logger: log.New(os.Stderr, "Binance-golang ", log.LstdFlags),
 	}
 }
 

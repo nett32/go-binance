@@ -8,14 +8,14 @@ import (
 type ProxyFunc func(*http.Request) (*url.URL, error)
 
 type ClientConfig struct {
-	UseTestnet   bool
-	RoundTripper http.RoundTripper
-	ProxyFunc    ProxyFunc
+	UseTestnet bool
+	httpClient *http.Client
+	ProxyFunc  ProxyFunc
 }
 
 func (cfg *ClientConfig) HTTPClient() *http.Client {
-	if cfg.RoundTripper != nil {
-		return &http.Client{Transport: cfg.RoundTripper}
+	if cfg.httpClient != nil {
+		return cfg.httpClient
 	}
 	if cfg.ProxyFunc != nil {
 		return &http.Client{Transport: &http.Transport{Proxy: cfg.ProxyFunc}}
@@ -39,9 +39,9 @@ func UseTestnet(useTestnet bool) ClientOptionFunc {
 	}
 }
 
-func WithRoundTripper(rt http.RoundTripper) ClientOptionFunc {
+func WithHttpClient(client *http.Client) ClientOptionFunc {
 	return func(cfg *ClientConfig) {
-		cfg.RoundTripper = rt
+		cfg.httpClient = client
 	}
 }
 
