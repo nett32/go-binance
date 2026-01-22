@@ -18,8 +18,8 @@ type OrderStatusWsService struct {
 }
 
 // NewOrderStatusWsService init OrderStatusWsService
-func NewOrderStatusWsService(apiKey, secretKey string) (*OrderStatusWsService, error) {
-	conn, err := websocket.NewConnection(WsApiInitReadWriteConn, WebsocketKeepalive, WebsocketTimeoutReadWriteConnection)
+func NewOrderStatusWsService(apiKey, secretKey string, opts ...common.WsOption) (*OrderStatusWsService, error) {
+	conn, err := websocket.NewConnection(WrapWsApiInitReadWriteConn(opts...), WebsocketKeepalive, WebsocketTimeoutReadWriteConnection)
 	if err != nil {
 		return nil, err
 	}

@@ -84,8 +84,8 @@ type OrderCancelWsService struct {
 }
 
 // NewOrderCancelWsService init OrderCancelWsService
-func NewOrderCancelWsService(apiKey, secretKey string) (*OrderCancelWsService, error) {
-	conn, err := websocket.NewConnection(WsApiInitReadWriteConn, WebsocketKeepalive, WebsocketTimeoutReadWriteConnection)
+func NewOrderCancelWsService(apiKey, secretKey string, opts ...common.WsOption) (*OrderCancelWsService, error) {
+	conn, err := websocket.NewConnection(WrapWsApiInitReadWriteConn(opts...), WebsocketKeepalive, WebsocketTimeoutReadWriteConnection)
 	if err != nil {
 		return nil, err
 	}
